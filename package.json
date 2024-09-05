@@ -2,16 +2,24 @@
   "name": "playwright_cars_app",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.46.1",
-    "@types/node": "^22.5.3"
+    "@types/node": "^22.5.3",
+    "start-server-and-test": "^2.0.5"
   },
   "dependencies": {
     "cheerio": "^1.0.0"
+  },
+  "scripts": {
+    "reset-db": "cd ~/Documents/cars_app && RAILS_ENV=test rails db:reset",
+    "start-server": "npm run reset-db && cd ~/Documents/cars_app && rails s -e test",
+    "test": "npx playwright test",
+    "setup": "start-server-and-test start-server http://localhost:3000",
+    "e2e": "npm run setup -- test",
+    "e2e:customers-grid": "npm run setup 'npm run test -- tests/customers/customers-grid/customers.grid.spec.ts'"
   }
 }

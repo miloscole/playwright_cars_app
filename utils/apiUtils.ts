@@ -40,7 +40,7 @@ export class ApiUtils {
 
     const loginPayload = {
       authenticity_token: authenticityToken,
-      login: "user@user.cc",
+      login: "testuser@user.cc",
       password: "user123",
       commit: "Login",
     };
