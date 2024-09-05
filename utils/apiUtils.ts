@@ -52,4 +52,58 @@ export class ApiUtils {
 
     this.responseStatusHandler(loginResponse.status());
   }
+
+  async createObject(resource: string, formData: { [key: string]: string }) {
+    const authenticityToken = await this.getAuthenticityToken(
+      `${resource}/new`
+    );
+
+    const createObjectPayload = {
+      authenticity_token: authenticityToken,
+      ...formData,
+    };
+
+    const createObjectResponse = await this.apiContext.post(
+      `${environment.baseUrl}${resource}`,
+      { form: createObjectPayload }
+    );
+
+    this.responseStatusHandler(createObjectResponse.status());
+
+    return await createObjectResponse.text();
+  }
+
+  async getIdFromParsedHtml(
+    response: string,
+    resource: string,
+    uniqueValue: string
+  ) {
+    const $ = cheerio.load(response);
+
+    const tRow = $(`tr:contains(${uniqueValue})`);
+
+    const id = tRow
+      .find(`a[href*="/${resource}/"]`)
+      .attr("href")
+      ?.split("/")[2] as string;
+    return id;
+  }
+
+  async deleteObject(resource: string, objectId: string) {
+    const authenticityToken = await this.getAuthenticityToken(
+      `${resource}/${objectId}/delete`
+    );
+
+    const deletePayload = {
+      _method: "delete",
+      authenticity_token: authenticityToken,
+    };
+
+    const deleteObjectResponse = await this.apiContext.post(
+      `${environment.baseUrl}${resource}/${objectId}`,
+      { form: deletePayload }
+    );
+
+    this.responseStatusHandler(deleteObjectResponse.status());
+  }
 }
