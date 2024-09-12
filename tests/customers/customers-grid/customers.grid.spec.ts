@@ -14,7 +14,9 @@ test.describe("Customers", () => {
   let state: any;
   let customers: CustomersGrid;
   let page: Page;
-  let parsedObject: string;
+  let parsedPageResponse: string;
+  let customerPayload: any;
+  let customersEmails: string[] = [];
 
   test.beforeAll(async ({ browser }) => {
     apiContext = await request.newContext();
@@ -27,14 +29,16 @@ test.describe("Customers", () => {
     customers = new CustomersGrid(page);
   });
 
-  test.afterEach(async () => {
-    const customerId = await apiUtils.getIdFromParsedHtml(
-      parsedObject,
-      "customers",
-      customers.customerData["customer[email]"]
-    );
-
-    await apiUtils.deleteObject("customers", customerId);
+  test.afterEach(() => {
+    customersEmails?.forEach(async (email) => {
+      const customerId = apiUtils.getIdFromParsedHtml(
+        parsedPageResponse,
+        "customers",
+        email
+      );
+      await apiUtils.deleteObject("customers", customerId);
+    });
+    customersEmails = [];
   });
 
   test.beforeEach(async () => {
@@ -42,6 +46,9 @@ test.describe("Customers", () => {
   });
 
   test("should verify if customer is listed", async () => {
+    customerPayload = customers.generateCustomerDataPayload();
+    customersEmails.push(customerPayload["customer[email]"]);
+
     await test.step("Navigate to customers grid and verify no customer exists", async () => {
       await customers.navigate();
 
@@ -49,9 +56,9 @@ test.describe("Customers", () => {
     });
 
     await test.step("Create a new customer via API", async () => {
-      parsedObject = await apiUtils.createObject(
+      parsedPageResponse = await apiUtils.createObject(
         "customers",
-        customers.customerData
+        customerPayload
       );
     });
 
@@ -60,18 +67,22 @@ test.describe("Customers", () => {
       expect(await customers.getCustomerCount()).toBe(1);
 
       expect(await customers.tableRow.textContent()).toContain(
-        "Petar Petrovic"
+        customerPayload["customer[first_name]"] +
+          " " +
+          customerPayload["customer[last_name]"]
       );
     });
   });
 
   test("should verify customer details in grid", async () => {
-    parsedObject = await apiUtils.createObject(
+    customerPayload = customers.generateCustomerDataPayload();
+    customersEmails.push(customerPayload["customer[email]"]);
+    parsedPageResponse = await apiUtils.createObject(
       "customers",
-      customers.customerData
+      customerPayload
     );
     await customers.navigate();
 
-    expect(await customers.hasValidDetails()).toBeTruthy();
+    expect(await customers.hasValidDetails(customerPayload)).toBeTruthy();
   });
 });
