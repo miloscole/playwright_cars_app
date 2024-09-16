@@ -4,4 +4,8 @@ export enum RandomDataType {
   Email = "email",
   PhoneNumber = "phone_number",
   Notes = "notes",
+  Brand = "brand",
+  Model = "model",
+  ProductionYear = "production_year",
+  Price = "price"
 }

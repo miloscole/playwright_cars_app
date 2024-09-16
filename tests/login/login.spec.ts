@@ -28,9 +28,9 @@ test.describe("Login", () => {
   test("Verify login", async () => {
     await page.goto("http://localhost:3000/");
 
-    const welcomeMessage = await page.isVisible(
+    const isWelcomeMessageVisible = await page.isVisible(
       'text=Welcome to the "Cars application"'
     );
-    expect(welcomeMessage).toBeTruthy();
+    expect(isWelcomeMessageVisible).toBeTruthy();
   });
 });

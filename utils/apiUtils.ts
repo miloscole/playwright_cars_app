@@ -1,6 +1,7 @@
 import { APIRequestContext } from "@playwright/test";
-import { environment } from "./environment";
 import * as cheerio from "cheerio";
+import { credentials } from "../config/credentials";
+import { environment } from "../config/environment";
 
 export class ApiUtils {
   apiContext: APIRequestContext;
@@ -67,8 +68,8 @@ export class ApiUtils {
 
     const loginPayload = {
       authenticity_token: authenticityToken,
-      login: "testuser@user.cc",
-      password: "user123",
+      login: credentials.testUser.email,
+      password: credentials.testUser.password,
       commit: "Login",
     };
 
@@ -80,7 +81,8 @@ export class ApiUtils {
     this.responseStatusHandler(loginResponse.status());
   }
 
-  // Private methods below
+  // #region Private methods
+
   private async getAllPagesResponse(initialResponse: string) {
     let completeResponse = initialResponse;
     let nextPageLink = await this.getNextPageLink(initialResponse);
