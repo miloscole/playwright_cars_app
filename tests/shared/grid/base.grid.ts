@@ -1,5 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { environment } from "../../../config/environment";
+import { CustomerPayload } from "../../../utils/customer.interface";
+import { CarPayload } from "../../../utils/cars.interface";
 
 export abstract class BaseGrid {
   abstract entity: string;
@@ -57,7 +59,9 @@ export abstract class BaseGrid {
     return await this.tableRow.count();
   }
 
-  abstract hasValidDetails(entityPayload: any): Promise<boolean>;
+  abstract hasValidDetails(
+    entityPayload: CustomerPayload | CarPayload
+  ): Promise<boolean>;
 
   async navigate() {
     await this.page.goto(this.url);

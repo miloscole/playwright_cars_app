@@ -16,7 +16,7 @@ export class RandomGenerator {
   public static generateRandomValueForField(
     fieldType: RandomDataType,
     opts?: { min: number; max: number }
-  ): string {
+  ): string | Date | number {
     switch (fieldType) {
       case RandomDataType.FirstName:
         return this.checkDataLength(
@@ -24,23 +24,44 @@ export class RandomGenerator {
           opts?.min,
           opts?.max
         );
+
       case RandomDataType.LastName:
         return this.checkDataLength(
           faker.person.lastName,
           opts?.min,
           opts?.max
         );
+
       case RandomDataType.Email:
-        return faker.internet
-          .email({ lastName: "m", provider: "c.cc" })
-          .toLowerCase();
+        return `${this.generateUniqueNumber()}@c.cc`;
+
       case RandomDataType.PhoneNumber:
         return faker.phone.number({ style: "national" });
+
       case RandomDataType.Notes:
         return faker.lorem.words(2);
+
+      case RandomDataType.Brand:
+        return faker.vehicle.manufacturer();
+
+      case RandomDataType.Model:
+        return faker.vehicle.model();
+
+      case RandomDataType.ProductionYear:
+        return faker.date
+          .between({ from: "2000-01-01", to: "2024-01-01" })
+          .toISOString()
+          .slice(0, 10);
+
+      case RandomDataType.Price:
+        return this.generateUniqueNumber();
 
       default:
         throw new Error(`Invalid random data type - ${fieldType}`);
     }
+  }
+
+  private static generateUniqueNumber(): number {
+    return +Date.now().toString().slice(-8);
   }
 }

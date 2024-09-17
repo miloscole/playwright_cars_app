@@ -8,6 +8,7 @@ import {
 import { ApiUtils } from "../../../utils/apiUtils";
 import { BaseGrid } from "./base.grid";
 import { CustomerPayload } from "../../../utils/customer.interface";
+import { CarPayload } from "../../../utils/cars.interface";
 
 export function runGridTests(baseGrid: BaseGrid) {
   let apiUtils: ApiUtils;
@@ -15,7 +16,7 @@ export function runGridTests(baseGrid: BaseGrid) {
   let state: any;
   let page: Page;
   let parsedPageResponse: string;
-  let entityPayload:  any | CustomerPayload;
+  let entityPayload: CarPayload | CustomerPayload;
   let entitiesUniqueValues: string[] = [];
 
   // #region Hooks
@@ -61,8 +62,8 @@ export function runGridTests(baseGrid: BaseGrid) {
     }
   }
 
-  async function verifyEntityExists(value: string) {
-    expect(await baseGrid.tableRow.textContent()).toContain(value);
+  async function verifyEntityExists(value: string | number) {
+    expect(await baseGrid.tableRow.textContent()).toContain(value.toString());
   }
 
   async function verifyPaginationButtons(
@@ -82,9 +83,6 @@ export function runGridTests(baseGrid: BaseGrid) {
 
   test(`should visually detect elements on ${baseGrid.entity}s page`, async () => {
     await baseGrid.navigate();
-
-    console.log(await baseGrid.entitiesTitle.textContent());
-    
 
     await expect(baseGrid.entitiesTitle).toBeVisible();
     await expect(baseGrid.searchBox).toBeVisible();
