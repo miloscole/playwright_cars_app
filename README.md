@@ -1,6 +1,13 @@
 # PlaywrightCarsApp
 
-This is a Playwright project for testing the **CarsApp**, a Ruby on Rails application. The tests cover core functionalities such as CRUD operations for cars, linking cars with customers, pagination, and data validation.
+This is a Playwright project for testing the **CarsApp**, a Ruby on Rails full stack application. Since JSON responses are not provided by the Rails server in this application, the API responses are parsed directly from HTML.
+
+The tests should cover core functionalities of the application, including:
+
+    CRUD operations for cars
+    Linking cars with customers
+    Pagination
+    Data validation
 
 **Note:** This project is a work in progress, with ongoing improvements and additional test cases being added.
 
@@ -15,16 +22,16 @@ This is a Playwright project for testing the **CarsApp**, a Ruby on Rails applic
 
 1. Clone the project:
 
-    ```bash
-    git clone https://github.com/miloscole/playwright_cars_app.git
-    cd playwright_cars_app
-    ```
+   ```bash
+   git clone https://github.com/miloscole/playwright_cars_app.git
+   cd playwright_cars_app
+   ```
 
 2. Install Node.js dependencies:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 ### 2. Configure the Rails application
 
@@ -32,32 +39,10 @@ For detailed setup and configuration of the **CarsApp** Rails application, pleas
 
 ## Running the Tests
 
-**Note:** Before running any script, make sure that the path to your CarsApp Rails application is correctly set in the package.json file.
+**Note:** Before running any script, make sure the Rails application (`CarsApp`) and this Playwright project
+are placed in the same parent folder and than navigate to playwright_cars_app with (`cd playwright_cars_app`).
 
-### 1. Reset the Database
-
-Before running the tests, reset the database to start with a clean state:
-
-```bash
-npm run reset-db
-```
-This script resets the cars_app_test database in the Rails application.
-
-### 2. Start the Rails Server
-
-Run the Rails server in test mode:
-
-```bash
-npm run start-server
-```
-
-### 3. Run All Tests
-
-```bash
-npm run e2e
-```
-
-### 4. Run Specific Tests
+### 1. Run Specific Tests
 
 To run specific test suites e.g. Customers grid tests:
 
@@ -69,4 +54,3 @@ npm run e2e:customers-grid
 
     tests/: Contains all tests organized by feature (e.g., customers, cars).
     utils/: Utility functions and tools for the tests.
-
